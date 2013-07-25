@@ -576,3 +576,25 @@ acceptance (ttbb)   = 0.142857(11/77)
 acceptance (ttcc)   = 0.104938(17/162)
 Ratio (Attjj/Attbb) = 0.596218
 
+Summary S5 for efficiency ratio (ttjj/ttbb) :
+
+dilepton with SC = 0.44353
+inclusive sampe  = 0.30974 
+powheg           = 0.44953
+mcatnlo          = 0.30403 
+
+matching up      = 0.4200 
+matching down    = 0.3991 
+scale up         = 0.5962 
+scale down       = 0.4099 
+
+Ratio of ttbb/ttjj at generator level from each sample
+
+dilepton with SC : total= 1.19679e+07 den(TTJJ)= 159553 den(TTBB)= 2067  : 0.0129549
+inclusive sample : total= 6.92375e+06 den(TTJJ)= 10540 den(TTBB)= 141    : 0.0133776
+powheg           : total= 1.07835e+07 den(TTJJ)= 142393 den(TTBB)= 2033  : 0.0142774
+mcatnlo          : total= 3.27238e+07 den(TTJJ)= 14556 den(TTBB)= 40     : 0.00274801 
+matching up      : total= 5.39364e+06 den(nTTJJ)= 7686 den(nTTBB)= 94    : 0.01223
+matching down    : total= 5.46863e+06 den(TTJJ)= 8350 den(TTBB)= 120     : 0.0143713
+scale up         : total= 5.00949e+06 den(TTJJ)= 5976 den(TTBB)= 77      : 0.0128849
+scale down       : total= 5.37739e+06 den(TTJJ)= 10201 den(TTBB)= 124    : 0.0121557
