@@ -1,5 +1,9 @@
 void roo2Dfit(){
 
+  gSystem->Load("libRooFit") ;
+  using namespace RooFit ;
+
+ 
   TFile* f = new TFile("output.root");
 
   TH1* x_data = (TH1*) f->Get("x_data_all");
@@ -87,13 +91,13 @@ void roo2Dfit(){
   //RooFormulaVar fsig2("fsig2","fsig2","@0/@1*@2/@3",RooArgList(fsig, RttbbReco, initR2, effR2) );
   
   //reconstruction level and later multiply by the efficiency ratio 
-  RooRealVar fsig("fsig","fsig",rttbb,0.0,1.0);
+  RooRealVar fsig("fsig","fsig",rttbb,0.01,0.09);
   //RooRealVar fsig2("fsig2","fsig2",rttb,0.0,1.0);
   //taking into account correlation with ttbb
   RooFormulaVar fsig2("fsig2","fsig2","@0/@1*@2",RooArgList(fsig, RttbbReco, RttbReco) );
    
 
-  RooRealVar k("k","normalization factor", 1.0, 0.0, 2.0) ;
+  RooRealVar k("k","normalization factor", 1.0, 0.85, 1.15) ;
   RooRealVar nttjj("nttjj","number of nttjj events", nVisible, nVisible, nVisible) ;
   RooFormulaVar knttjj("knttjj","number of ttjj events after fitting","k*nttjj",RooArgList(k,nttjj));
   RooRealVar nmcbkg("nmcbkg","number of mc background events", nMCBkg, nMCBkg, nMCBkg) ;
@@ -191,17 +195,35 @@ void roo2Dfit(){
 
   RooArgSet* params = model3.getVariables() ; 
   params->Print("v"); 
-/*
+
   RooAbsReal* nll = model3.createNLL(data);
-
-  RooPlot* RFrame = R.frame();
-  nll->plotOn(RFrame);
+ 
+  RooPlot* RFrame = fsig.frame();
+  nll.plotOn(RFrame,ShiftToZero()) ; // shift the minimum of negative log likelihood y value to zero
+  //nll->plotOn(RFrame);
   TCanvas* cR = new TCanvas("R", "R", 500, 500);
+  double r1=0.5; //one sigma variation. for two sigma, it should be 2.0
+   
+  RFrame->SetMaximum(4);RFrame->SetMinimum(0);
   RFrame->Draw();
-
+  TLine *line = new TLine(RFrame->GetXaxis()->GetXmin() ,r1,RFrame->GetXaxis()->GetXmax(),r1);
+  line->SetLineColor(kRed);
+  line->Draw();
+   
+  RooAbsReal* nllk = model3.createNLL(data);
   RooPlot* kFrame = k.frame();
-  nll->plotOn(kFrame);
+  nllk.plotOn(kFrame,ShiftToZero()); // shift the minimum of negative log likelihood y value to zero
+  //nllk->plotOn(kFrame);
   TCanvas* ck = new TCanvas("k", "k", 500, 500);
+   
+  double k1=0.5; //one sigma variation. for two sigam, it should be 2.0
+   
+  kFrame->SetMaximum(4);kFrame->SetMinimum(0);
   kFrame->Draw();
-*/
+   
+  TLine *linek = new TLine(kFrame->GetXaxis()->GetXmin() ,k1,kFrame->GetXaxis()->GetXmax(),k1);
+  linek->SetLineColor(kRed);
+  linek->Draw();
+
+
 }
