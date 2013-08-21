@@ -42,8 +42,9 @@ void roo2Dfit(){
 
   bool separatettb = true;
   if( !separatettb ) xy_ttLF->Add(xy_ttb);
+  bool separatettcc = true;
+  if( !separatettcc ) xy_ttLF->Add(xy_ttcc);
  
-  xy_ttLF->Add(xy_ttcc);
   TH2F * xy_mcbkg = new TH2F("x_mcbkg","x_mcbkg",10,0.0,1.0,10,0.0,1.0);
   TH2F * xy_databkg = new TH2F("x_databkg","x_databkg",10,0.0,1.0,10,0.0,1.0);
   xy_mcbkg->Add(xy_bkg);
@@ -58,8 +59,12 @@ void roo2Dfit(){
   double nTtLF = xy_ttLF->Integral();
   double nTtb = xy_ttb->Integral();
   double nTtbb = xy_ttbb->Integral();
+  double nTtcc = xy_ttcc->Integral();
   double rttb = nTtb/nVisible;
   double rttbb = nTtbb/nVisible;
+  double rttcc = nTtcc/nVisible;
+  double ratiottbboverttb = rttbb/rttb;
+  cout << "rttb = " << rttb <<  " rttbb= " << rttbb << " ratio of ttbb over ttb = " << ratiottbboverttb << endl;
   double nOthers = xy_ttOthers->Integral();
   double nTtbar = nVisible + nOthers;
   double nSingleTop = xy_singleTop->Integral();
@@ -78,6 +83,7 @@ void roo2Dfit(){
   RooRealVar initR2("initR2","initR2",0.048, 0.048, 0.048);
   RooRealVar RttbbReco("RttbbReco","RttbbReco",rttbb, rttbb, rttbb);
   RooRealVar RttbReco("RttbReco","RttbReco",rttb, rttb, rttb);
+  RooRealVar RttccReco("RttccReco","RttccReco",rttcc, rttcc, rttcc);
 
   //taking into account in fit
   //RooRealVar R("R","R",0.016,0.,1.);
@@ -93,6 +99,7 @@ void roo2Dfit(){
   //reconstruction level and later multiply by the efficiency ratio 
   RooRealVar fsig("fsig","fsig",rttbb,0.01,0.09);
   //RooRealVar fsig2("fsig2","fsig2",rttb,0.0,1.0);
+  RooRealVar fsig3("fsig3","fsig3",rttcc,0.0,1.0);
   //taking into account correlation with ttbb
   RooFormulaVar fsig2("fsig2","fsig2","@0/@1*@2",RooArgList(fsig, RttbbReco, RttbReco) );
    
@@ -119,6 +126,7 @@ void roo2Dfit(){
   //histograms
   RooDataHist data("data","data set with (x,y)", RooArgList(x,y), xy_data);
   RooDataHist ttbb("ttbb","ttbb set with (x,y)", RooArgList(x,y), xy_ttbb);
+  RooDataHist ttcc("ttcc","ttbb set with (x,y)", RooArgList(x,y), xy_ttcc);
   RooDataHist ttb("ttb","ttb set with (x,y)", RooArgList(x,y), xy_ttb);
   RooDataHist ttLF("ttLF","ttLF set with (x,y)", RooArgList(x,y), xy_ttLF);
   RooDataHist ttOthers("ttOthers","ttOthers set with (x,y)", RooArgList(x,y), xy_ttOthers);
@@ -129,6 +137,7 @@ void roo2Dfit(){
 
   //pdf 
   RooHistPdf ttbbpdf("ttbbpdf","ttbbpdf", RooArgList(x,y), ttbb);
+  RooHistPdf ttccpdf("ttccpdf","ttccpdf", RooArgList(x,y), ttcc);
   RooHistPdf ttbpdf("ttbpdf","ttbpdf", RooArgList(x,y), ttb);
   RooHistPdf ttLFpdf("ttLFpdf","ttLFpdf", RooArgList(x,y), ttLF);
   RooHistPdf ttOtherspdf("ttOtherspdf","ttOtherspdf", RooArgList(x,y), ttOthers);
@@ -140,7 +149,10 @@ void roo2Dfit(){
   if(separatettb){
     //RooAddPdf ttLFmodel("ttLF", "R*ttb+(1-R)*ttLF",RooArgList( ttbpdf, ttLFpdf), RooArgList(fttb));
     //RooAddPdf model("model", "R*sig+(1-R)*bkg",RooArgList( ttbbpdf, ttLFmodel), RooArgList(fsig));
-    RooAddPdf model("model", "R*sig+Rb*ttb+(1-R-Rb)*bkg",RooArgList( ttbbpdf, ttbpdf, ttLFpdf), RooArgList(fsig,fsig2));
+    //default
+    //RooAddPdf model("model", "R*sig+Rb*ttb+(1-R-Rb)*bkg",RooArgList( ttbbpdf, ttbpdf, ttLFpdf), RooArgList(fsig,fsig2));
+    //ttcc separate
+    RooAddPdf model("model", "R*sig+Rb*ttb+Rc*ttcc+(1-R-Rb-Rc)*bkg",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttLFpdf), RooArgList(fsig,fsig2,fsig3));
     RooAddPdf model2("model2","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf",RooArgList( model, mcbkgpdf), RooArgList(knttjj, knmcbkg) );
     RooAddPdf model3("model3","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, databkgpdf), RooArgList(knttjj, knmcbkg, ndatabkg) ) ;
     //tth
@@ -168,6 +180,15 @@ void roo2Dfit(){
   cout << "FINAL : Rreco= " << recoR <<  " +- " << recoRerror << endl;
   cout << "FINAL : R= "     << genR <<  " +- "  << genRerror << endl;
   cout << "FINAL : k= "     << kVal <<  " +- "  << kValerror << endl;
+
+  // constraint
+  double recoR2 = recoR/RttbbReco.getVal() * RttbReco.getVal();
+  double recoR2error = recoR2 * recoRerror/recoR;
+  double genR2 = recoR2*eR2;
+  double genR2error = recoR2*eR2* recoRerror/recoR; 
+  cout << "Constraint" << endl;
+  cout << "FINAL : R2reco= " << recoR2 <<  " +- " << recoR2error << endl;
+  cout << "FINAL : R2= "     << genR2 <<  " +- "  << genR2error << endl;
   
 
   RooPlot * xframe = x.frame();
