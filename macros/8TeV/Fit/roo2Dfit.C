@@ -42,7 +42,7 @@ void roo2Dfit(){
 
   bool separatettb = true;
   if( !separatettb ) xy_ttLF->Add(xy_ttb);
-  bool separatettcc = true;
+  bool separatettcc = false;
   if( !separatettcc ) xy_ttLF->Add(xy_ttcc);
  
   TH2F * xy_mcbkg = new TH2F("x_mcbkg","x_mcbkg",10,0.0,1.0,10,0.0,1.0);
@@ -76,33 +76,43 @@ void roo2Dfit(){
   //double eR = 0.382948 (old without taula);
   double eR = 0.3888;
   double eR2 = 0.638661;
+
+  /// Set Variables ////////////////////////////////////////////////////////////////////////////////////
   //basic
   RooRealVar x("x","x",0,1) ; 
   RooRealVar y("y","y",0,1) ; 
-  RooRealVar initR("R","R",0.016,0.016,0.016);
-  RooRealVar initR2("initR2","initR2",0.048, 0.048, 0.048);
-  RooRealVar RttbbReco("RttbbReco","RttbbReco",rttbb, rttbb, rttbb);
-  RooRealVar RttbReco("RttbReco","RttbReco",rttb, rttb, rttb);
-  RooRealVar RttccReco("RttccReco","RttccReco",rttcc, rttcc, rttcc);
 
-  //taking into account in fit
-  //RooRealVar R("R","R",0.016,0.,1.);
+  // sigma Rttbb and Rttb
+  RooRealVar RttbbSigmaInit("RttbbSigmaInit","RttbbSigmaInit",0.016,0.016,0.016);
+  RooRealVar RttbSigmaInit("RttbSigmaInit","RttbSigmaInit",0.048, 0.048, 0.048);
+  // reco level
+  RooRealVar RttbbInit("RttbbInit","RttbbInit",rttbb, rttbb, rttbb);
+  RooRealVar RttbInit("RttbInit","RttbInit",rttb, rttb, rttb);
+  RooRealVar RttccInit("RttccInit","RttccInit",rttcc, rttcc, rttcc);
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  //taking into account the efficiency correction in fit
+  //for ttbb
+  //RooRealVar RttbbSigma("RttbbSigma","RttbbSigma",0.016,0.,1.);
   //RooRealVar effR("effR","acceptance ratio for ttbb",eR,eR,eR);
-  //RooFormulaVar fsig("fsig","fraction of signal ttbb","R/effR",RooArgList(R,effR));
-
-  //RooRealVar R2("R2","R2",0.048,0.,1.);
+  //RooFormulaVar Rttbb("Rttbb","fraction of signal ttbb","RttbbSigma/effR",RooArgList(RttbbSigma,effR));
+  //for ttb
+  //RooRealVar RttbSigma("RttbSigma","RttbSigma",0.048,0.,1.);
   //RooRealVar effR2("effR2","acceptance ratio for ttb",eR2,eR2,eR2);
-  //RooFormulaVar fsig2("fsig2","fraction of signal ttb","R2/effR2",RooArgList(R2,effR2));
+  //RooFormulaVar Rttb("Rttb","fraction of signal ttb","RttbSigma/effR2",RooArgList(RttbSigma,effR2));
   //taking into account correlation with ttbb
-  //RooFormulaVar fsig2("fsig2","fsig2","@0/@1*@2/@3",RooArgList(fsig, RttbbReco, initR2, effR2) );
-  
-  //reconstruction level and later multiply by the efficiency ratio 
-  RooRealVar fsig("fsig","fsig",rttbb,0.01,0.09);
-  //RooRealVar fsig2("fsig2","fsig2",rttb,0.0,1.0);
-  RooRealVar fsig3("fsig3","fsig3",rttcc,0.0,1.0);
+  //RooFormulaVar Rttb("Rttb","Rttb","@0/@1*@2/@3",RooArgList(Rttbb, RttbbInit, RttbSigmaInit, effR2) );
+  //////////////////////////////////////////////////////////////////////////////////////////////////////  
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Reconstruction level and later have to multiply the efficiency ratio to get the RttbbSigma or RttbSigma 
+  RooRealVar Rttbb("Rttbb","Rttbb",rttbb,0.01,0.09);
+  RooRealVar Rttcc("Rttcc","Rttcc",rttcc,0.0,1.0);
   //taking into account correlation with ttbb
-  RooFormulaVar fsig2("fsig2","fsig2","@0/@1*@2",RooArgList(fsig, RttbbReco, RttbReco) );
-   
+  RooFormulaVar Rttb("Rttb","Rttb","@0/@1*@2",RooArgList(Rttbb, RttbbInit, RttbInit) );
+  //free parameter for ttb
+  //RooRealVar Rttb("Rttb","Rttb",rttb,0.0,1.0);
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
   RooRealVar k("k","normalization factor", 1.0, 0.85, 1.15) ;
   RooRealVar nttjj("nttjj","number of nttjj events", nVisible, nVisible, nVisible) ;
@@ -123,6 +133,9 @@ void roo2Dfit(){
   //data-driven background
   RooRealVar ndatabkg("ndatabkg","number of data-driven events", nDataBkg , nDataBkg, nDataBkg) ;
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
   //histograms
   RooDataHist data("data","data set with (x,y)", RooArgList(x,y), xy_data);
   RooDataHist ttbb("ttbb","ttbb set with (x,y)", RooArgList(x,y), xy_ttbb);
@@ -134,6 +147,8 @@ void roo2Dfit(){
   RooDataHist mcbkg("mcbkg","bkg set with (x,y)", RooArgList(x,y), xy_mcbkg);
   RooDataHist databkg("databkg","bkg set with (x,y)", RooArgList(x,y), xy_databkg);
   RooDataHist tth("tth","tth set with (x,y)", RooArgList(x,y), xy_tth);
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //pdf 
   RooHistPdf ttbbpdf("ttbbpdf","ttbbpdf", RooArgList(x,y), ttbb);
@@ -147,49 +162,63 @@ void roo2Dfit(){
   RooHistPdf tthpdf("tthpdf","tthpdf", RooArgList(x,y), tth);
 
   if(separatettb){
-    //RooAddPdf ttLFmodel("ttLF", "R*ttb+(1-R)*ttLF",RooArgList( ttbpdf, ttLFpdf), RooArgList(fttb));
-    //RooAddPdf model("model", "R*sig+(1-R)*bkg",RooArgList( ttbbpdf, ttLFmodel), RooArgList(fsig));
-    //default
-    //RooAddPdf model("model", "R*sig+Rb*ttb+(1-R-Rb)*bkg",RooArgList( ttbbpdf, ttbpdf, ttLFpdf), RooArgList(fsig,fsig2));
-    //ttcc separate
-    RooAddPdf model("model", "R*sig+Rb*ttb+Rc*ttcc+(1-R-Rb-Rc)*bkg",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttLFpdf), RooArgList(fsig,fsig2,fsig3));
+    if(!separatettcc){
+      //default
+      RooAddPdf model("model", "R*sig+Rb*ttb+(1-R-Rb)*bkg",RooArgList( ttbbpdf, ttbpdf, ttLFpdf), RooArgList(Rttbb,Rttb));
+      RooAddPdf model2("model2","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf",RooArgList( model, mcbkgpdf), RooArgList(knttjj, knmcbkg) );
+      RooAddPdf model3("model3","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, databkgpdf), RooArgList(knttjj, knmcbkg, ndatabkg) ) ;
+
+      //tth
+      RooAddPdf modeltth("modeltth","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf+ntth*tthpdf",RooArgList( model, mcbkgpdf, databkgpdf,tthpdf), RooArgList(knttjj, knmcbkg, ndatabkg,ntth) ) ;
+      //separate single top
+      RooAddPdf model4("model4","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+s*nsingeTop*singleToppdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, singleToppdf, databkgpdf), RooArgList(knttjj, knmcbkg, snsingleTop, ndatabkg) ) ;
+
+      model3.fitTo(data);
+
+    }else if(separatettcc){
+      RooAddPdf model("model", "R*sig+Rb*ttb+Rc*ttcc+(1-R-Rb-Rc)*bkg",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttLFpdf), RooArgList(Rttbb,Rttb,Rttcc));
+      RooAddPdf model2("model2","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf",RooArgList( model, mcbkgpdf), RooArgList(knttjj, knmcbkg) );
+      RooAddPdf model3("model3","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, databkgpdf), RooArgList(knttjj, knmcbkg, ndatabkg) ) ;
+
+      model3.fitTo(data);
+    }
+  }else {
+    RooAddPdf model("model", "R*sig+(1-R)*bkg",RooArgList( ttbbpdf, ttLFpdf), RooArgList(Rttbb));
     RooAddPdf model2("model2","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf",RooArgList( model, mcbkgpdf), RooArgList(knttjj, knmcbkg) );
     RooAddPdf model3("model3","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, databkgpdf), RooArgList(knttjj, knmcbkg, ndatabkg) ) ;
-    //tth
-    RooAddPdf modeltth("modeltth","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf+ntth*tthpdf",RooArgList( model, mcbkgpdf, databkgpdf,tthpdf), RooArgList(knttjj, knmcbkg, ndatabkg,ntth) ) ;
-    //separate single top
-    RooAddPdf model4("model4","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+s*nsingeTop*singleToppdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, singleToppdf, databkgpdf), RooArgList(knttjj, knmcbkg, snsingleTop, ndatabkg) ) ;
 
     model3.fitTo(data);
-  }else{
-    RooAddPdf model("model", "R*sig+(1-R)*bkg",RooArgList( ttbbpdf, ttLFpdf), RooArgList(fsig));
-    RooAddPdf model2("model2","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf",RooArgList( model, mcbkgpdf), RooArgList(knttjj, knmcbkg) );
-    RooAddPdf model3("model3","k*nttjj*(R*sig+(1-R)*bkg)+k*nmcbkg*bkgpdf+ndatabkg*databkgpdf",RooArgList( model, mcbkgpdf, databkgpdf), RooArgList(knttjj, knmcbkg, ndatabkg) ) ;
-    model3.fitTo(data);
+
   }
 
-  double recoR = fsig.getVal();
-  double recoRerror = fsig.getError();
+  double recoR = Rttbb.getVal();
+  double recoRerror = Rttbb.getError();
   double genR = recoR*eR;
   double genRerror = recoR*eR*recoRerror/recoR;
   double kVal = k.getVal();
   double kValerror = k.getError();
 
+  double Nttjj = kVal*nttjj.getVal();
+  double Nttbb = kVal*nttjj.getVal()*recoR;
+
   // genR= efficiency ratio(ttjj/ttbb) * recoR 
-  cout << "FINAL : RESULT" << endl;  
-  cout << "FINAL : Rreco= " << recoR <<  " +- " << recoRerror << endl;
-  cout << "FINAL : R= "     << genR <<  " +- "  << genRerror << endl;
-  cout << "FINAL : k= "     << kVal <<  " +- "  << kValerror << endl;
+  cout << "FINAL : RESULT"      << endl;  
+  cout << "FINAL : Rreco= "     << recoR <<  " +- " << recoRerror << endl;
+  cout << "FINAL : Rsigma= "    << genR <<  " +- "  << genRerror << endl;
+  cout << "FINAL : k= "         << kVal <<  " +- "  << kValerror << endl;
 
   // constraint
-  double recoR2 = recoR/RttbbReco.getVal() * RttbReco.getVal();
+  double recoR2 = recoR/RttbbInit.getVal() * RttbInit.getVal();
   double recoR2error = recoR2 * recoRerror/recoR;
   double genR2 = recoR2*eR2;
   double genR2error = recoR2*eR2* recoRerror/recoR; 
   cout << "Constraint" << endl;
-  cout << "FINAL : R2reco= " << recoR2 <<  " +- " << recoR2error << endl;
-  cout << "FINAL : R2= "     << genR2 <<  " +- "  << genR2error << endl;
+  cout << "FINAL : R2reco= "      << recoR2 <<  " +- " << recoR2error << endl;
+  cout << "FINAL : R2sigma= "     << genR2 <<  " +- "  << genR2error << endl;
   
+  //number of Nttbb and Nttjj
+  cout << "Number of Nttjj = " << Nttjj << endl;
+  cout << "Number of Nttbb = " << Nttbb << endl;
 
   RooPlot * xframe = x.frame();
   //data.plotOn(xframe, DataError(RooAbsData::SumW2) ) ;
@@ -219,7 +248,7 @@ void roo2Dfit(){
 
   RooAbsReal* nll = model3.createNLL(data);
  
-  RooPlot* RFrame = fsig.frame();
+  RooPlot* RFrame = Rttbb.frame();
   nll.plotOn(RFrame,ShiftToZero()) ; // shift the minimum of negative log likelihood y value to zero
   //nll->plotOn(RFrame);
   TCanvas* cR = new TCanvas("R", "R", 500, 500);
@@ -245,6 +274,5 @@ void roo2Dfit(){
   TLine *linek = new TLine(kFrame->GetXaxis()->GetXmin() ,k1,kFrame->GetXaxis()->GetXmax(),k1);
   linek->SetLineColor(kRed);
   linek->Draw();
-
 
 }
