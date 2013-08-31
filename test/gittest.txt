@@ -2,5 +2,6 @@ adding test file
 another test 
 pull test
 ssh test
-confit setup test
-confit setup test2
+config setup test
+config setup test2
+config setup test3
