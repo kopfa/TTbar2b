@@ -2,3 +2,4 @@ adding test file
 another test 
 pull test
 ssh test
+confit setup test
