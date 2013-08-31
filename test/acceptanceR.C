@@ -107,15 +107,15 @@ void acceptance(const TString & path){
   TCut cut_S3 = cut_em_S3 + "abs(ZMass-91.2) > 15 && MET > 30";
   
   //TCut cut_em_S4 = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet30 >=4";
-  TCut cut_em_S4 = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet40 >=4";
+  TCut cut_em_S4 = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet50 >=4";
   TCut cut_S4 = cut_em_S4 + "abs(ZMass-91.2) > 15 && MET > 30";
 
   //TCut cut_em_S5M = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet30 >=4 && nbjets30_CSVM >= 2";
-  TCut cut_em_S5M = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet40 >=4 && nbjets30_CSVM >= 2";
+  TCut cut_em_S5M = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet50 >=4 && nbjets30_CSVM >= 2";
   TCut cut_S5M = cut_em_S5M + "abs(ZMass-91.2) > 15 && MET > 30";
 
   //TCut cut_em_S5 = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet30 >=4 && nbjets30_CSVT >= 2";
-  TCut cut_em_S5 = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet40 >=4 && nbjets30_CSVT >= 2";
+  TCut cut_em_S5 = "ZMass > 12 && isIso > 0 && PairSign < 0 && nJet50 >=4 && nbjets30_CSVT >= 2";
   TCut cut_S5 = cut_em_S5 + "abs(ZMass-91.2) > 15 && MET > 30";
 
   print(t_mm, t_ee, t_em, total, cut_S1, cut_em_S1,"S1");
