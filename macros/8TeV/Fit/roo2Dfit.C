@@ -209,13 +209,15 @@ void roo2Dfit(){
 
   // constraint
   double recoR2 = recoR/RttbbInit.getVal() * RttbInit.getVal();
+  double recoR2_test = Rttb.getVal(); 
   double recoR2error = recoR2 * recoRerror/recoR;
   double genR2 = recoR2*eR2;
   double genR2error = recoR2*eR2* recoRerror/recoR; 
   cout << "Constraint" << endl;
   cout << "FINAL : R2reco= "      << recoR2 <<  " +- " << recoR2error << endl;
   cout << "FINAL : R2sigma= "     << genR2 <<  " +- "  << genR2error << endl;
-  
+  cout << "FINAL : Rereco(test) = " << recoR2_test << endl;
+
   //number of Nttbb and Nttjj
   cout << "Number of Nttjj = " << Nttjj << endl;
   cout << "Number of Nttbb = " << Nttbb << endl;

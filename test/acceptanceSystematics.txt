@@ -533,3 +533,47 @@ matching down    : total= 5.46863e+06 den(TTJJ)= 35143 den(TTBB)= 591    : 0.016
 scale up         : total= 5.00949e+06 den(TTJJ)= 27806 den(TTBB)= 456    : 0.01640 (456/27806)
 scale down       : total= 5.37739e+06 den(TTJJ)= 42637 den(TTBB)= 683    : 0.01602 (686/42637)
 
+Acceptance 
+
+dilepton with SC : 
+acceptance (ttjj)   = 0.0689754(48980/710108)
+acceptance (ttbb)   = 0.177425(1946/10968)
+acceptance (ttcc)   = 0.0878825(2286/26012)
+ 
+inclusive sample :
+acceptance (ttjj)   = 0.0718365(3308/46049)
+acceptance (ttbb)   = 0.197011(145/736)
+acceptance (ttcc)   = 0.0861357(146/1695)
+
+powheg :
+acceptance (ttjj)   = 0.0701164(42501/606149) - 1.65 %
+acceptance (ttbb)   = 0.178185(1810/10158) - 0.42 %
+acceptance (ttcc)   = 0.0873323(1940/22214)
+
+mcatnlo :
+acceptance (ttjj)   = 0.076188(5039/66139) - 10.5 %
+acceptance (ttbb)   = 0.227778(41/180) - 28.4 %
+acceptance (ttcc)   = 0.127485(218/1710)
+
+matching up :
+acceptance (ttjj)   = 0.069961(2404/34362) - 1.4 %
+acceptance (ttbb)   = 0.194805(105/539) - 9.7 %
+acceptance (ttcc)   = 0.0853755(108/1265)
+
+matching down :
+acceptance (ttjj)   = 0.0720769(2533/35143) - 4.48 %
+acceptance (ttbb)   = 0.19797(117/591) - 11.6 %
+acceptance (ttcc)   = 0.0904131(116/1283)
+
+scale up :
+acceptance (ttjj)   = 0.0703805(1957/27806) - 2.03 %
+acceptance (ttbb)   = 0.164474(75/456) - 7.3%
+acceptance (ttcc)   = 0.0835052(81/970)
+
+scale down :
+acceptance (ttjj)   = 0.070807(3019/42637) - 2.66 %
+acceptance (ttbb)   = 0.183016(125/683) - 3.15 %
+acceptance (ttcc)   = 0.100365(165/1644)
+
+total theory uncertainty on ttjj = 7 %
+total theory uncertainty on ttbb = 14 %
