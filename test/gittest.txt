@@ -3,3 +3,4 @@ another test
 pull test
 ssh test
 confit setup test
+confit setup test2
