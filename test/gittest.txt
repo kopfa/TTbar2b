@@ -1,3 +1,7 @@
 adding test file
 another test 
 pull test
+ssh test
+config setup test
+config setup test2
+config setup test3
