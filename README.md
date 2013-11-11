@@ -5,4 +5,4 @@ And also some results are saved in this directory. It needs to be up-to-date so 
 
 How to checkout
 
-git clone git://githib.com/monttj/TTbar2b TTbar2b
+git clone git://githib.com/monttj/TTbar2b KoPFA/TTbar2b
