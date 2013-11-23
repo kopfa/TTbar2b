@@ -49,6 +49,10 @@ void ana(string decayMode = "ElEl", string imageOutDir = "")
   TCut sigcut = "nGenbJet40 >= 4";
   TCut ttcc = "nGencJet40 >= 2";
 
+  //TCut visible = "nGenaddJet40 >= 2" ;
+  //TCut sigcut = "nGenaddbJet40 >= 2";
+  //TCut ttcc = "nGencJet40 >= 2";
+
   TCut dilepton = "ttbarGen_dileptonic == 1";
 
   analyzer->addMCSig("TTbarbb", "t#bar{t} + bb", mcPath+"/vallot_TTbarFullLepMGDecays.root", 26, kBlue+2, true, visible && sigcut);
