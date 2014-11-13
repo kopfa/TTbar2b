@@ -590,32 +590,32 @@ scale down       = 0.4099 -7%
 
 Efficiency for 40 GeV
 inclusive sampe
-acceptance (ttjj)   = 0.0856736(903/10540)
-acceptance (ttbb)   = 0.276596(39/141)
+efficiency (ttjj)   = 0.0856736(903/10540)
+efficiency (ttbb)   = 0.276596(39/141)
 
 dilepton with SC
-acceptance (ttjj)   = 0.082612(13181/159553)
-acceptance (ttbb)   = 0.18626(385/2067)
+efficiency (ttjj)   = 0.082612(13181/159553)
+efficiency (ttbb)   = 0.18626(385/2067)
 
 powheg 
-acceptance (ttjj)   = 0.0829184(11807/142393) -1%
-acceptance (ttbb)   = 0.184456(375/2033) 1%
+efficiency (ttjj)   = 0.0829184(11807/142393) -1%
+efficiency (ttbb)   = 0.184456(375/2033) 1%
 
 matching up
-acceptance (ttjj)   = 0.0804059(618/7686) -3.5%
-acceptance (ttbb)   = 0.191489(18/94) 3%
+efficiency (ttjj)   = 0.0804059(618/7686) -3.5%
+efficiency (ttbb)   = 0.191489(18/94) 3%
 
 matching down
-acceptance (ttjj)   = 0.0864671(722/8350) 4.2%
-acceptance (ttbb)   = 0.216667(26/120) 13%
+efficiency (ttjj)   = 0.0864671(722/8350) 4.2%
+efficiency (ttbb)   = 0.216667(26/120) 13%
 
 scale up
-acceptance (ttjj)   = 0.085174(509/5976) 2.7%
-acceptance (ttbb)   = 0.142857(11/77) -25%
+efficiency (ttjj)   = 0.085174(509/5976) 2.7%
+efficiency (ttbb)   = 0.142857(11/77) -25%
 
 scale down
-acceptance (ttjj)   = 0.082639(843/10201) -0.3%
-acceptance (ttbb)   = 0.201613(25/124) -25%
+efficiency (ttjj)   = 0.082639(843/10201) -0.3%
+efficiency (ttbb)   = 0.201613(25/124) -25%
 
 
 
