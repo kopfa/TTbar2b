@@ -580,13 +580,13 @@ Summary S5 for efficiency ratio (ttjj/ttbb) :
 
 dilepton with SC = 0.44353
 inclusive sampe  = 0.30974 
-powheg           = 0.44953
+powheg           = 0.44953 - 1.3%
 mcatnlo          = 0.30403 
 
-matching up      = 0.4200 
-matching down    = 0.3991 
-scale up         = 0.5962 
-scale down       = 0.4099 
+matching up      = 0.4200 -5%
+matching down    = 0.3991 -10%
+scale up         = 0.5962 34%
+scale down       = 0.4099 -7%
 
 Efficiency for 40 GeV
 inclusive sampe
